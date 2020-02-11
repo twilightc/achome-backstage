@@ -262,7 +262,6 @@ const UploadMerchandisePage: FC = () => {
                     if (e.keyCode === 13) {
                       setSpec1List([...spec1List, spec1]);
                       setSpec1('');
-                      // console.log(spec1List);
                     }
                   }}
                   variant="outlined"
