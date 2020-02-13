@@ -26,3 +26,7 @@ export interface TokenBody {
   Account: string;
   UserName: string;
 }
+
+export interface ItemLinks {
+  [key: string]: string;
+}

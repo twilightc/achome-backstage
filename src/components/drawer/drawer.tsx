@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, FC } from 'react';
 import clsx from 'clsx';
 import {
   useTheme,
@@ -22,9 +22,18 @@ import {
   MailIcon
 } from '../../modules/share-material/material-icon';
 import { useStyles } from './useStyles';
-import './styls.scss';
+import { useHistory } from 'react-router-dom';
 
-let MiniDrawer: React.FC = ({ children }) => {
+let MiniDrawer: FC = ({ children }) => {
+  const history = useHistory();
+  const ItemLinks = useMemo(
+    () => [
+      { key: '管理', value: 'manage' },
+      { key: '新增商品', value: 'add-merchandise' },
+      { key: '商品列表', value: 'merchandise-list' }
+    ],
+    []
+  );
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -87,16 +96,18 @@ let MiniDrawer: React.FC = ({ children }) => {
         </div>
         <Divider />
         <List>
-          {['管理', '新增修改商品', 'Send email', 'Drafts'].map(
-            (text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            )
-          )}
+          {ItemLinks.map((data, index) => (
+            <ListItem
+              button
+              key={data.key}
+              onClick={() => history.push(`/${data.value}`)}
+            >
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={data.key} />
+            </ListItem>
+          ))}
         </List>
         <Divider />
       </Drawer>
