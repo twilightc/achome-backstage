@@ -34,6 +34,13 @@ export interface MerchandiseViewModel {
   Spec2: string[];
 }
 
+export interface BackStageSearchModel {
+  PageSize: number;
+  PageIndex: number;
+  OrderString: string;
+  isOrderByDesc: boolean;
+}
+
 export interface MerchandiseSpecViewModel {
   SpecId: number;
   Price: number;
