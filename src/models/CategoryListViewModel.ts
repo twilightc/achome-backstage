@@ -20,7 +20,7 @@ export interface MerchandiseViewModel {
   MerchandiseId: string;
   OwnerAccount: string;
   MerchandiseTitle: string;
-  MerhandiseContent: string;
+  MerchandiseContent: string;
   SoldQty: number;
   RemainingQty: number;
   CategoryId: string;

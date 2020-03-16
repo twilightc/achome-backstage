@@ -56,6 +56,7 @@ interface EnhancedTableProps {
   order: Order;
   orderBy: string;
   rowCount: number;
+  currentPage: number;
 }
 
 export const EnhancedTableHead: FC<EnhancedTableProps> = ({
@@ -65,7 +66,8 @@ export const EnhancedTableHead: FC<EnhancedTableProps> = ({
   orderBy,
   numSelected,
   rowCount,
-  onRequestSort
+  onRequestSort,
+  currentPage
 }) => {
   const createSortHandler = (property: keyof Data) => (
     event: React.MouseEvent<unknown>

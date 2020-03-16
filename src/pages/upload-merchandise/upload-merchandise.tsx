@@ -2,19 +2,20 @@
 import React, { FC, useCallback, useState, useEffect } from 'react';
 import useStyles from './useStyles';
 import cuid from 'cuid';
-import { Switch, Button } from '../../modules/share-material/material-core';
-import FormControlLabel from '@material-ui/core/FormControlLabel/FormControlLabel';
-import { GetCategoryList } from '../../api/merchandise';
-import { CategoryListViewModel } from '../../models/CategoryListViewModel';
 import {
+  Switch,
+  Button,
   FormControl,
+  FormControlLabel,
   InputLabel,
   Select,
   MenuItem,
   Box,
-  Chip
-} from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
+  Chip,
+  TextField
+} from '../../modules/share-material/material-core';
+import { GetCategoryList } from '../../api/merchandise';
+import { CategoryListViewModel } from '../../models/CategoryListViewModel';
 import { Addmerchandise } from '../../api/upload';
 import {
   AddMerchandiseModel,
@@ -153,7 +154,7 @@ const UploadMerchandisePage: FC = () => {
           (prev, curr) => prev + curr,
           0
         );
-        console.log(`SetSpecAmount:${temp}`);
+        // console.log(`SetSpecAmount:${temp}`);
         setNewItem(state => ({ ...state, RemainingQty: temp }));
       }
     }

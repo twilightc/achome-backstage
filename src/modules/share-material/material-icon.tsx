@@ -6,6 +6,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import EditIcon from '@material-ui/icons/Edit';
 
 export {
   MenuIcon,
@@ -15,5 +16,6 @@ export {
   InboxIcon,
   MailIcon,
   DeleteIcon,
-  FilterListIcon
+  FilterListIcon,
+  EditIcon
 };

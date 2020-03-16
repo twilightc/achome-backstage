@@ -7,15 +7,23 @@ import {
   Paper,
   TableContainer,
   TableBody,
-  TablePagination
+  Box,
+  TablePagination,
+  IconButton
 } from '../../modules/share-material/material-core';
+import { EditIcon } from '../../modules/share-material/material-icon';
 import { EnhancedTableToolbar, EnhancedTableHead } from './enhanced-table';
 import { useStyles } from './useStyles';
-import { GetBSMerhandiseListDetail } from '../../api/merchandise';
+import {
+  GetBSMerhandiseListDetail,
+  EditBSMerchandise
+} from '../../api/merchandise';
 import {
   BackStageSearchModel,
-  MerchandiseWrapper
+  MerchandiseWrapper,
+  MerchandiseViewModel
 } from '../../models/CategoryListViewModel';
+import MerchandiseListDialog from '../dialogs/merchandise-list-dialog/merchandise-list-dialog';
 
 export interface Data {
   MerchandiseTitle: string;
@@ -33,6 +41,8 @@ const MerchandiseList: FC = () => {
   const [selected, setSelected] = React.useState<string[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [MListOpen, setMListOpen] = useState<boolean>(false);
+  const [merchandiseDetailId, setMerchandiseDetailId] = useState<string>('');
   const [backStageSearchModel, setBackStageSearchModel] = useState<
     BackStageSearchModel
   >({
@@ -94,6 +104,7 @@ const MerchandiseList: FC = () => {
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setBackStageSearchModel(state => ({ ...state, PageIndex: newPage + 1 }));
+
     setPage(newPage);
   };
 
@@ -110,6 +121,27 @@ const MerchandiseList: FC = () => {
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
+  const editMerchandise = async (merchandise: MerchandiseViewModel) => {
+    const { data: response } = await EditBSMerchandise(merchandise);
+
+    if (response.Success) {
+      const itemAmount = merchandise.MerchandiseSpec.reduce(
+        (prev, current) => prev + current.RemainingQty,
+        0
+      );
+      let amountIndex = merchandiseList.MerchandiseViewModel.findIndex(
+        data => data.MerchandiseId === merchandise.MerchandiseId
+      );
+      setMerchandiseList(state => ({
+        ...state,
+        ...(state.MerchandiseViewModel[amountIndex] = {
+          ...state.MerchandiseViewModel[amountIndex],
+          RemainingQty: itemAmount
+        })
+      }));
+    }
+  };
+
   useEffect(() => {
     const getBSMerhandiseListDetail = async () => {
       const { data: response } = await GetBSMerhandiseListDetail(
@@ -117,12 +149,13 @@ const MerchandiseList: FC = () => {
       );
 
       if (response.Success) {
+        console.log(response.Data);
         setMerchandiseList(response.Data);
       }
     };
 
     getBSMerhandiseListDetail();
-  }, [backStageSearchModel]);
+  }, [backStageSearchModel, setMerchandiseList]);
 
   return (
     <div className={classes.root}>
@@ -142,7 +175,8 @@ const MerchandiseList: FC = () => {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rowsPerPage}
+              currentPage={page}
+              rowCount={merchandiseList.MerchandiseAmount}
             />
             <TableBody>
               {merchandiseList.MerchandiseViewModel.map(
@@ -165,10 +199,22 @@ const MerchandiseList: FC = () => {
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ 'aria-labelledby': labelId }}
-                        />
+                        <Box style={{ display: 'inline-flex' }}>
+                          <Checkbox
+                            checked={isItemSelected}
+                            inputProps={{ 'aria-labelledby': labelId }}
+                          />
+                          <IconButton
+                            color="secondary"
+                            onClick={e => {
+                              setMListOpen(true);
+                              setMerchandiseDetailId(merchandise.MerchandiseId);
+                              e.stopPropagation();
+                            }}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </Box>
                       </TableCell>
                       <TableCell
                         component="th"
@@ -187,11 +233,6 @@ const MerchandiseList: FC = () => {
                   );
                 }
               )}
-              {/* {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )} */}
             </TableBody>
           </Table>
         </TableContainer>
@@ -205,6 +246,14 @@ const MerchandiseList: FC = () => {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
+      {MListOpen && (
+        <MerchandiseListDialog
+          isOpen={MListOpen}
+          merchandiseDetailId={merchandiseDetailId}
+          editMerchandise={editMerchandise}
+          onClosed={() => setMListOpen(false)}
+        ></MerchandiseListDialog>
+      )}
     </div>
   );
 };
