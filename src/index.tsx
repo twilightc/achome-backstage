@@ -6,7 +6,9 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter, Switch } from 'react-router-dom';
 
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter
+    basename={process.env.NODE_ENV === 'production' ? '/backstage' : ''}
+  >
     <Switch>
       <App />
     </Switch>

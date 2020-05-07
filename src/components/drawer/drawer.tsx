@@ -30,7 +30,8 @@ let MiniDrawer: FC = ({ children }) => {
     () => [
       { key: '管理', value: 'manage' },
       { key: '新增商品', value: 'add-merchandise' },
-      { key: '商品列表', value: 'merchandise-list' }
+      { key: '商品列表', value: 'merchandise-list' },
+      { key: '回前台頁面', value: '' }
     ],
     []
   );

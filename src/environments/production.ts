@@ -1,4 +1,4 @@
 export const production = {
   production: true,
-  apiUrl: "https://nexifytw.mynetgear.com/api"
+  apiUrl: 'http://nexifytw.mynetgear.com/api'
 };
